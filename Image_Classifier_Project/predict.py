@@ -10,13 +10,11 @@ batch_size = 64
 
 # setting
 parser = argparse.ArgumentParser()
-parser.add_argument('--image_path', action='store',
-                    default='./test_images/cautleya_spicata.jpg',
-                    help='Enter path to image.')
+parser.add_argument('--image_path', action='store', dest='image_path',
+                    default='./test_images/cautleya_spicata.jpg')
 
 parser.add_argument('--model_dir', action='store',
-                    dest='model_dir', default='my_model.h5',
-                    help='Enter location to save checkpoint in.')
+                    dest='model_dir', default='my_model.h5')
 
 args = parser.parse_args()
 
