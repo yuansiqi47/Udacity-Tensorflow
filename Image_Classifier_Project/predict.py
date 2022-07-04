@@ -10,11 +10,17 @@ batch_size = 64
 
 # setting
 parser = argparse.ArgumentParser()
-parser.add_argument('--image_path', action='store', dest='image_path',
+parser.add_argument(action='store', dest='image_path',
                     default='./test_images/cautleya_spicata.jpg')
 
-parser.add_argument('--model_dir', action='store',
-                    dest='model_dir', default='my_model.h5')
+parser.add_argument(action='store', dest='model_dir',
+                    default='my_model.h5')
+
+parser.add_argument('--top_k', action='store', dest='top_k',
+                    default=1)
+
+parser.add_argument('--category_names', action='store',
+                    dest='category_names', default='label_map.json')
 
 args = parser.parse_args()
 
@@ -37,14 +43,16 @@ image = np.expand_dims(image, axis=0)
 probs = model.predict(image).flatten().tolist()
 
 # open class_names file
-with open('label_map.json', 'r') as f:
+with open(args.category_names, 'r') as f:
     class_names = json.load(f)
 
 # Get the probability and the predicted class
-prob = max(probs)
-index = probs.index(prob) + 1
-cls = class_names[str(index)]
-
-# Print the probability and the predicted class
-print(prob)
-print(cls)
+for i in range(int(args.top_k)):
+    prob = max(probs)
+    index = probs.index(prob) + 1
+    cls = class_names[str(index)]
+    # Print the probability and the predicted class
+    print(prob)
+    print(cls)
+    probs.remove(prob)
+    i += 1
